@@ -20,21 +20,28 @@
             </form>
             
             <ul class="nav navbar-nav navbar-right">
+                @if(Auth::check())
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                    Hello Henry <span class="caret"></span>
+                    Welcome back &nbsp; {{ Auth::user()->name }} <span class="caret"></span>
                     </a>                            
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{ route('store.admin') }}">Store</a></li>
-                        <li><a href="#">Categories</a></li>
+                        <li><a href="{{ route('profile.edit') }}">My Profile</a></li>
+                        <li><a href="{{ route('store.admin') }}">Settings</a></li>
+                        @if(Auth::user()->id == 11)
+                        <li><a href="{{ route('categories.index') }}">Categories</a></li>
                         <li><a href="{{ route('tags.index') }}">Tags</a></li>
+                        @endif
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Logout</a></li>
+                        <li><a href="{{ route('logout') }}">Logout</a></li>
                     </ul>
                 </li> 
-
-                <li><a href="{{ route('auth.register') }}">Register</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#myModal2">Sign in</a></li>
+                @endif
+                
+                @if(!Auth::check())
+                    <li><a href="{{ route('auth.register') }}">Register</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal2">Sign in</a></li>
+                @endif
                 @include('partials.signin_modal')
             </ul>
         </div><!-- /navbar collaspe --> 

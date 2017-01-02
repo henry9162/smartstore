@@ -30,14 +30,16 @@ Route::post('/register', [
 	'as' => 'auth.postRegister'
 ]);
 
-Route::get('/signIn', [
-	'uses' => 'AuthController@getSignIn',
-	'as' => 'auth.signIn'
-]);
 
 Route::post('/signIn', [
 	'uses' => 'AuthController@signIn',
-	'as' => 'auth.postSignIn'
+	'as' => 'auth.signIn'
+]);
+
+
+Route::get('/logout', [
+	'uses' => 'AuthController@logout',
+	'as' => 'logout'
 ]);
 
 
@@ -60,10 +62,13 @@ Route::get('/tags', [
 
 /*Tags route*/
 
-/*Route::get('tag/{id}', [
-	'uses' => 'TagController@getTag',
-	'as' => 'tag.page'
-]);*/
-
 Route::resource('tags', 'TagController', ['except' => ['create']]);
+
+Route::resource('categories', 'CategoryController', ['except' => ['create']]);
+
+
+Route::get('/profile', [
+	'uses' => 'ProfileController@edit',
+	'as' => 'profile.edit'
+]);
 

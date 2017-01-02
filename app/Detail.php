@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 use SmartStore\User;
 
+use SmartStore\Category;
+
+use SmartStore\Tag;
+
+
 class Detail extends Model
 {
 
@@ -19,4 +24,12 @@ class Detail extends Model
 
     	return $this->belongsTo('SmartStore\User');
     }
+
+
+    public function categories()
+    {
+
+        return $this->belongsToMany('SmartStore\Category');
+    }
+
 }

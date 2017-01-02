@@ -10,19 +10,28 @@ use SmartStore\Detail;
 
 use Image;
 
+use SmartStore\Tag;
+
+use SmartStore\Category;
+
+use Auth;
+
 class AuthController extends Controller
 {
 
 	public function getRegister()
     {
+        $tags = Tag::all();
 
-		return view('auth.register');  	
+        $categories = Category::all();
+
+		return view('auth.register')->withCategories($categories)->withTags($tags);  	
     }
     
     public function Register(Request $request)
     {
 
-		$this->validate($request, [
+		/*$this->validate($request, [
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
@@ -30,10 +39,10 @@ class AuthController extends Controller
             'store_image' => 'sometimes|image',
             'description' => 'required|max:255',
             'address' => 'required|max:200|unique:details,address',
-            'city' => 'required|max:255',
             'area' => 'required|max:255',
             'park' => 'required|max:255'
-        ]);
+        ]);*/
+
 
         $user = User::create([
 
@@ -43,44 +52,56 @@ class AuthController extends Controller
         ]);
 
 
-        if($request->hasFile('store_image'))
+        if ($request->hasFile('store_image'))
         {
             $image = $request->file('store_image');
             $filename = time(). '.' .$image->getClientOriginalExtension();
             $location = public_path('images/' . $filename);
             Image::make($image)->resize(800, 600)->save($location);
 
-            $user->details()->create([
+
+            $detail = Detail::create([
 
             'store' => $request->input('store'),
             'image' => $filename,
             'description' => $request->input('description'),
             'address' => $request->input('address'),
-            'city' => $request->input('city'),
             'area' => $request->input('area'),
             'park' => $request->input('park'),
             'user_id' => $user->id,
-        ]);
+        ])->categories()->sync($request->categories, false);
 
         }
-
+        
         return redirect()->route('home')->with('info', 'Your shop is ready, you can now sign in.');
 
     }
 
 
-    public function getSignIn()
+    public function SignIn(Request $request)
     {
 
-    	return view('auth.signIn');
+    	$this->validate($request, [
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+        
+        if (!Auth::attempt($request->only(['email', 'password']), $request->has('remember'))){
+            return redirect()->back()->with('info', 'Could not sign you in with these details, please check and try again.');
+        }
+
+        // The only helper function can only pass in maximum of two variables
+        return redirect()->route('store.index', Auth::user()->id)->with('info', 'You are now signed in!.');
     } 
 
 
-    public function SignIn()
+    public function logout()
     {
 
-    	dd('signin');
-    } 
+        Auth::logout();
+
+        return redirect()->route('home');
+    }
 
     
 }

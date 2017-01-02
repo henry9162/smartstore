@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- Signin form -->
-                    {!! form::open(['route' => 'auth.postSignIn', 'method' => 'POST']) !!}
+                    {!! form::open(['route' => 'auth.signIn', 'method' => 'POST']) !!}
 
                         <div class="form-group">
                             <div class="row">

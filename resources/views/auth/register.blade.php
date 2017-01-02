@@ -1,5 +1,9 @@
 @extends('templates.default')
 
+@section('stylesheets')
+	{!! Html::style('css/select2.min.css') !!}
+@endsection
+
 @section('content')
 
 <div class="row">
@@ -10,7 +14,7 @@
 
 			<hr>
 
-			{!! form::open(['route' => 'auth.postRegister', 'methdo' => 'POST', 'files' => true]) !!}
+			{!! form::open(['route' => 'auth.postRegister', 'method' => 'POST', 'files' => true]) !!}
 
 				{{ form::label('name', 'Full Name') }}
 				{{ form::text('name', null, ['class' => 'form-control', 'required', 'maxlength' => '70']) }}
@@ -44,8 +48,22 @@
 		{{ form::label('address', 'Store Address') }}
 		{{ form::text('address', null, ['class' => 'form-control', 'required', 'maxlength' => '100']) }}
 
+		{{-- {{ form::label('category_id', 'Category') }}
+			<select class="form-control" name="category_id">
+				@foreach ($categories as $category)
+					<option value="{{ $category->id }}">{{ $category->name }}</option>
+				@endforeach
+			</select>
+
 		{{ form::label('city', 'State/City') }}
-		{{ form::text('city', null, ['class' => 'form-control', 'required']) }}
+		{{ form::text('city', null, ['class' => 'form-control', 'required']) }} --}}
+
+		{{ form::label('categories', 'Categories') }}
+			<select class="form-control label-spacing-down select2-multi" name="categories[]" multiple="multiple">
+				@foreach ($categories as $category)
+					<option value="{{ $category->id }}">{{ $category->name }}</option>
+				@endforeach
+			</select>
 
 		{{ form::label('area', 'Local Government Area') }}
 		{{ form::text('area', null, ['class' => 'form-control', 'required']) }}
@@ -59,5 +77,12 @@
 
 </div>
 
+@endsection
+
+@section('scripts')
+	{!! Html::script('js/select2.min.js') !!}
+	<script type="text/javascript">
+		$('.select2-multi').select2();
+	</script>
 @endsection
 

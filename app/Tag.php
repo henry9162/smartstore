@@ -4,6 +4,8 @@ namespace SmartStore;
 
 use Illuminate\Database\Eloquent\Model;
 
+use SmartStore\Detail;
+
 class Tag extends Model
 {
     
@@ -11,4 +13,6 @@ class Tag extends Model
 
     	'name',
     ];
+
+
 }
