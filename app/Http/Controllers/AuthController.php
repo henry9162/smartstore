@@ -8,9 +8,9 @@ use SmartStore\User;
 
 use SmartStore\Detail;
 
-use Image;
+use SmartStore\State;
 
-use SmartStore\Tag;
+use Image;
 
 use SmartStore\Category;
 
@@ -21,19 +21,22 @@ class AuthController extends Controller
 
 	public function getRegister()
     {
-        $tags = Tag::all();
 
         $categories = Category::all();
 
-		return view('auth.register')->withCategories($categories)->withTags($tags);  	
+        $states = State::all();
+
+		return view('auth.register')->withCategories($categories)->withStates($states);  	
     }
     
     public function Register(Request $request)
     {
 
-		/*$this->validate($request, [
+		$this->validate($request, [
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
+            'contact' => 'required|unique:users,contact',
+            'state_id' => 'required|integer',
             'password' => 'required|min:6',
             'store' => 'required|max:200|unique:details,store',
             'store_image' => 'sometimes|image',
@@ -41,13 +44,15 @@ class AuthController extends Controller
             'address' => 'required|max:200|unique:details,address',
             'area' => 'required|max:255',
             'park' => 'required|max:255'
-        ]);*/
+        ]);
 
 
         $user = User::create([
 
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'contact' => $request->input('contact'),
+            'state_id' => $request->input('state_id'),
             'password' => bcrypt($request->input('password')),
         ]);
 

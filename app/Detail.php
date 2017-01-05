@@ -4,12 +4,6 @@ namespace SmartStore;
 
 use Illuminate\Database\Eloquent\Model;
 
-use SmartStore\User;
-
-use SmartStore\Category;
-
-use SmartStore\Tag;
-
 
 class Detail extends Model
 {

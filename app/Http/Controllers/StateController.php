@@ -4,20 +4,16 @@ namespace SmartStore\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use SmartStore\Tag;
+use SmartStore\State;
 
-class TagController extends Controller
+class StateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        $tags = Tag::orderBy('id', 'desc')->paginate(20);
+        $states = State::orderBy('id', 'desc')->paginate(20);
 
-        return view('tags.index')->withTags($tags);
+        return view('states.index')->withStates($states);
     }
 
     
@@ -35,13 +31,13 @@ class TagController extends Controller
             'name' => 'required|max:255'
         ]);
 
-        $tag = new Tag;
+        $state = new State;
 
-        $tag->name = $request->name;
+        $state->name = $request->name;
 
-        $tag->save();
+        $state->save();
 
-        return redirect()->route('tags.index', $tag->id)->with('info', 'Successfully added tag');
+        return redirect()->route('states.index', $state->id)->with('info', 'Successfully added State');
     }
 
     /**
@@ -52,9 +48,9 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        $tag = Tag::find($id);
+        $state = State::find($id);
 
-        return view('tags.show')->withTag($tag);
+        return view('states.show')->withState($state);
     }
 
     /**
@@ -65,9 +61,9 @@ class TagController extends Controller
      */
     public function edit($id)
     {
-        $tag = Tag::find($id);
+        $state = State::find($id);
 
-        return view('tags.edit')->withTag($tag);
+        return view('states.edit')->withState($state);
     }
 
     /**
@@ -79,19 +75,19 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tag = Tag::find($id);
+        $state = State::find($id);
 
         $this->validate($request, [
             'name' => 'required|max:255'
         ]);
 
-        $tag = Tag::find($id);
+        $state = State::find($id);
 
-        $tag->name = $request->name;
+        $state->name = $request->name;
 
-        $tag->save();
+        $state->save();
 
-        return redirect()->route('tags.index')->with('info', 'Successfully updated tag');
+        return redirect()->back()->with('info', 'Successfully updated state');
     }
 
     /**
@@ -103,10 +99,10 @@ class TagController extends Controller
     public function destroy($id)
     {
         
-        $tag = Tag::find($id);
+        $state = State::find($id);
 
-        $tag->delete();
+        $state->delete();
 
-        return redirect()->route('tags.index')->with('info', 'Successfully deleted tag');
+        return redirect()->route('states.index')->with('info', 'Successfully deleted state');
     }
 }

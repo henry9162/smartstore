@@ -22,6 +22,16 @@
 				{{ form::label('email', 'Email') }}
 				{{ form::email('email', null, ['class' => 'form-control', 'required']) }}
 
+				{{ form::label('contact', 'Mobile Number') }}
+				{{ form::text('contact', null, ['class' => 'form-control', 'required']) }}
+
+				{{ form::label('state_id', 'State/city') }}
+				<select class="form-control" name="state_id">
+					@foreach ($states as $state)
+						<option value="{{ $state->id }}">{{ $state->name }}</option>
+					@endforeach
+				</select>
+
 				{{ form::label('password', 'Password') }}
 				{{ form::password('password', ['class' => 'form-control', 'required']) }}<br><br>
 		</div>

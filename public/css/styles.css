@@ -1,3 +1,15 @@
 .btn-spacing{
 	margin: 15px 0px 10px;
 }
+
+dl > label {
+	color:grey;
+}
+
+dl > span {
+	color:orange;
+}
+
+.editDetails{
+	margin-top: 5px;
+}

@@ -26,11 +26,15 @@
                     Welcome back &nbsp; {{ Auth::user()->name }} <span class="caret"></span>
                     </a>                            
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{ route('profile.edit') }}">My Profile</a></li>
+                        <li><a href="{{ route('store.index', Auth::user()->id) }}">My Store</a></li>
+                        <li><a href="{{ route('profile.index', Auth::user()->id) }}">Profile</a></li>
                         <li><a href="{{ route('store.admin') }}">Settings</a></li>
-                        @if(Auth::user()->id == 11)
+                        @if(Auth::user()->name == 'Felix Ekwonwa')
+                        <li role="separator" class="divider"></li>
                         <li><a href="{{ route('categories.index') }}">Categories</a></li>
                         <li><a href="{{ route('tags.index') }}">Tags</a></li>
+                        <li><a href="{{ route('states.index') }}">Location</a></li>
+                        <li role="separator" class="divider"></li>
                         @endif
                         <li role="separator" class="divider"></li>
                         <li><a href="{{ route('logout') }}">Logout</a></li>

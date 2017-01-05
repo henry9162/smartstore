@@ -22,12 +22,14 @@ Route::get('/', [
 
 Route::get('/register', [
 	'uses' => 'AuthController@getRegister',
-	'as' => 'auth.register'
+	'as' => 'auth.register',
+	'middleware' => ['guest']
 ]);
 
 Route::post('/register', [
 	'uses' => 'AuthController@Register',
-	'as' => 'auth.postRegister'
+	'as' => 'auth.postRegister',
+	'middleware' => ['guest'],
 ]);
 
 
@@ -66,9 +68,20 @@ Route::resource('tags', 'TagController', ['except' => ['create']]);
 
 Route::resource('categories', 'CategoryController', ['except' => ['create']]);
 
+Route::resource('states', 'StateController', ['except' => ['create']]);
 
-Route::get('/profile', [
-	'uses' => 'ProfileController@edit',
-	'as' => 'profile.edit'
+
+Route::get('/store/profile/{userId}', [
+	'uses' => 'ProfileController@index',
+	'as' => 'profile.index'
 ]);
 
+Route::post('/profile/edit', [
+	'uses' => 'ProfileController@update', 
+	'as' => 'profile.update'
+]);
+
+Route::put('/store/update/{userId}', [
+	'uses' => 'ProfileController@updateStore',
+	'as' => 'store.update'
+]);

@@ -1,1 +1,0 @@
-Show tag and associated stores!

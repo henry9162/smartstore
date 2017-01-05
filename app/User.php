@@ -5,7 +5,6 @@ namespace SmartStore;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-use SmartStore\Detail;
 
 class User extends Authenticatable
 {
@@ -17,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'state_id', 'contact',
     ];
 
     /**
@@ -34,5 +33,11 @@ class User extends Authenticatable
     {
 
         return $this->hasOne('SmartStore\Detail');
+    }
+
+    public function state()
+    {
+
+        return $this->belongsTo('SmartStore\State');
     }
 }
