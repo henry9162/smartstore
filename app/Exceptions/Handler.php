@@ -3,6 +3,7 @@
 namespace SmartStore\Exceptions;
 
 use Exception;
+use Session;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -60,7 +61,9 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        return redirect()->guest('login');
+        Session::put('oldUrl', $request->url());
+
+        return redirect()->route('signIn');
     }
 
     protected function convertExceptionToResponse(Exception $e)

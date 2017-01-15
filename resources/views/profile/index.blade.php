@@ -8,12 +8,25 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-4">
-			<h4>Profile</h4>
+			<div class="row">
+				<div class="col-md-6">
+					<h4>Profile</h4>
+				</div>
+				<div class="col-md-6">
+					<a href="#" data-toggle="modal" data-target="#myModal3"  class="btn btn-primary btn-sm">Edit profile</a>
+		        	@include('partials.edit_modal_profile')
+		    	</div>
+			</div>
 			<hr>
 
 			<dl class="dl-horizontal">
-	            <label>Name:</label>
-	            <span>{{ $store->user->name }}</span>
+	            <label>Full Name:</label>
+	            <span>{{ $store->user->getName() }}</span>
+	        </dl>
+
+			<dl class="dl-horizontal">
+	            <label>Username:</label>
+	            <span>{{ $store->user->username }}</span>
 	        </dl>
 
 	        <dl class="dl-horizontal">
@@ -30,13 +43,18 @@
 	            <label>Location:</label>
 	            <span>{{ Auth::user()->state->name }}</span>
 	        </dl>
-
-	        <p><a href="#" data-toggle="modal" data-target="#myModal3"  class="btn btn-primary btn-block">Edit profile</a><p>
-	        @include('partials.edit_modal_profile')
 		</div>
 
 		<div class="col-md-6 col-md-offset-1">
-			<h4>Store Details</h4>
+			<div class="row">
+				<div class="col-md-6">
+					<h4>Store Details</h4>
+				</div>
+				<div class="col-md-6">
+					<a href="#" data-toggle="modal" data-target="#myModal4"  class="btn btn-primary btn-sm">Edit Store</a>
+			        @include('partials.edit_modal_store')
+			    </div>
+			</div>
 			<hr>
 
 			<dl class="dl-horizontal">
@@ -71,10 +89,46 @@
 	            	<span class="label label-default">{{ $category->name }}</span>
 	            @endforeach
 	        </dl>
-
-	        <p><a href="#" data-toggle="modal" data-target="#myModal4"  class="btn btn-primary btn-block">Edit Details</a></p>
-	        @include('partials.edit_modal_store')
 		</div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+		<div class="row">
+			<div class="col-md-6">
+				<h3 class="text-center">My Products</h3>
+			</div>
+			<div class="col-md-6">
+				<p style="margin-top:16px;"><a href="#" data-toggle="modal" data-target="#addProducts" class="btn btn-primary btn-sm btn-block">Add Products</a></p>
+				@include('partials.add_modal_products')
+			</div>
+		</div>
+		<hr>
+
+		<div class="row">
+			@foreach($store->products as $product)
+                    <div class="col-md-2">
+                        <div class="thumbnail">
+                            <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->title }}">
+                            <div class="caption">
+                                <h6 style="color:orange;margin-top:5px;margin-bottom:2px;">{{ $product->title }} &nbsp; <span style="color:brown">${{ $product->price }}</span></h6>
+                                <p style="color:grey;font-size:11px;">{{ substr($product->description, 0, 50) }}{{ strlen($product->description) > 50 ? "..." : "" }}</p>
+                                <!-- <p class="text-center"><a href="#" data-toggle="modal" data-target="#viewProduct" class="btn btn-primary btn-xs">View</a></p> -->
+                                 <p style="font-size:10px">
+                                    <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star-empty"></span>
+                                    3 reviews
+                                </p>
+                                
+                                <a href="#" data-toggle="modal" data-target="#editProduct" class="btn btn-warning btn-block btn-xs text-center">Edit</a>
+                                @include('partials.edit_modal_product')
+                            </div>
+                        </div>
+                    </div>
+                 @endforeach
+		</div>
+		<hr>
 	</div>
 @endsection
 

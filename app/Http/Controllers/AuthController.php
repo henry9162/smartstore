@@ -6,81 +6,64 @@ use Illuminate\Http\Request;
 
 use SmartStore\User;
 
-use SmartStore\Detail;
-
 use SmartStore\State;
 
-use Image;
-
-use SmartStore\Category;
+use SmartStore\Role;
 
 use Auth;
 
+use Session;
+
 class AuthController extends Controller
 {
-
-	public function getRegister()
-    {
-
-        $categories = Category::all();
-
-        $states = State::all();
-
-		return view('auth.register')->withCategories($categories)->withStates($states);  	
-    }
     
     public function Register(Request $request)
     {
 
-		$this->validate($request, [
-            'name' => 'required|max:255',
+        $this->validate($request, [
+            'first_name' => 'required|max:25',
+            'last_name' => 'required|max:25',
+            'username' => 'required|max:15|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'contact' => 'required|unique:users,contact',
             'state_id' => 'required|integer',
-            'password' => 'required|min:6',
-            'store' => 'required|max:200|unique:details,store',
-            'store_image' => 'sometimes|image',
-            'description' => 'required|max:255',
-            'address' => 'required|max:200|unique:details,address',
-            'area' => 'required|max:255',
-            'park' => 'required|max:255'
+            'password' => 'required|min:6'
         ]);
 
 
         $user = User::create([
 
-            'name' => $request->input('name'),
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'username' => $request->input('username'),
             'email' => $request->input('email'),
             'contact' => $request->input('contact'),
             'state_id' => $request->input('state_id'),
             'password' => bcrypt($request->input('password')),
         ]);
 
+        $user->roles()->attach(Role::where('name', 'generalUsers')->first());
 
-        if ($request->hasFile('store_image'))
-        {
-            $image = $request->file('store_image');
-            $filename = time(). '.' .$image->getClientOriginalExtension();
-            $location = public_path('images/' . $filename);
-            Image::make($image)->resize(800, 600)->save($location);
+        Auth::login($user);
+        
+        if(Session::has('oldUrl')){
 
+            $oldUrl = Session::get('oldUrl');
+            Session::forget('oldUrl');
 
-            $detail = Detail::create([
-
-            'store' => $request->input('store'),
-            'image' => $filename,
-            'description' => $request->input('description'),
-            'address' => $request->input('address'),
-            'area' => $request->input('area'),
-            'park' => $request->input('park'),
-            'user_id' => $user->id,
-        ])->categories()->sync($request->categories, false);
-
+            return redirect()->to($oldUrl);
         }
         
-        return redirect()->route('home')->with('info', 'Your shop is ready, you can now sign in.');
+        return redirect()->route('home')->with('info', 'Thank you for Signing up with smartstore, create your store and start selling!');
 
     }
+
+
+    public function getSignIn(Request $request)
+    { 
+        $states = State::all();
+        return view('auth.signin')->withStates($states);
+    } 
 
 
     public function SignIn(Request $request)
@@ -95,8 +78,21 @@ class AuthController extends Controller
             return redirect()->back()->with('info', 'Could not sign you in with these details, please check and try again.');
         }
 
-        // The only helper function can only pass in maximum of two variables
+        if(Session::has('oldUrl')){
+
+            $oldUrl = Session::get('oldUrl');
+            Session::forget('oldUrl');
+
+            return redirect()->to($oldUrl);
+        }
+
+        if (!Auth::user()->details){
+
+             return redirect()->route('home')->with('info', 'You are now signed in!.');
+        } 
+
         return redirect()->route('store.index', Auth::user()->id)->with('info', 'You are now signed in!.');
+
     } 
 
 

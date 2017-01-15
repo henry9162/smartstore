@@ -91,7 +91,7 @@
 
                          <div class="form-group">
                             <div class="row">                
-                                <p class="text-center"> {{ form::submit('Update Store', ['class' => 'btn btn-primary btn-sm btn-block']) }}</p>                                        
+                                <p class="text-center"> {{ form::submit('Update Store', ['class' => 'btn btn-primary btn-sm']) }}</p>                                        
                             </div>
                          </div>    
 

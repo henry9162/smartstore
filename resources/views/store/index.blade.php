@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-10">
 			<div class="row">
 				<div class="col-md-3">
 					<img class="img-responsive" src="{{ asset('images/' . $store->image) }}" width="100%" height="100%"  />
@@ -15,62 +15,54 @@
 				</div>
 			</div>
 			<hr>
-		</div>
 
-		<div class="col-md-4">
-			<div class="row">
-				<div class="well">
-                    <div class="row">
-                        <div class="col-md-6">
-        					<h4><span style="color:brown">Store Details</span></h4>
-                        </div>
-
-                        <div class="col-md-6 editDetails">
-                            @if(Auth::check())
-                                @if(Auth::user()->id == $store->user->id)
-                                    <a href="{{ route('profile.index', $store->user->id) }}" class="btn btn-warning btn-block btn-sm">Edit Details</a>
-                                @endif
-                            @endif
+            <div class="row">
+                @foreach($store->products as $product)
+                    <div class="col-md-3">
+                        <div class="thumbnail">
+                            <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->title }}">
+                            <div class="caption">
+                                <h4 class="text-center" style="color:brown;margin-top:5px;margin-bottom:2px;"><strong>{{ $product->title }}</strong></h4>
+                                <h3 class="text-center" style="color:grey;margin:15px 0px">${{ $product->price }}</h3>
+                                <p class="text-center"><a href="{{ route('product.single', $product->slug) }}" class="btn btn-warning btn-xs"  style="width:80px;">View</a></p>
+                                <p class="text-center"><a href="{{ route('product.cart', $product->id) }}" class="btn btn-warning btn-xs" style="width:80px;margin-bottom:20px">Add to Cart</a></p>
+                                <!-- <p class="text-center"><a href="#" data-toggle="modal" data-target="#viewProduct" class="btn btn-primary btn-xs">View</a></p> -->
+                                 <p style="font-size:10px">
+                                    <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star-empty"></span>
+                                    3.7
+                                </p>
+                            </div>
                         </div>
                     </div>
+                 @endforeach
+            </div>
 
-					<hr>
+		</div>
+
+		<div class="col-md-2">
+			<div class="row">
+				<div class="well">
+        			<h4><span style="color:brown">About Store</span></h4>
                     
-					<dl class="dl-horizontal">
-                        <label>Store Owner:</label>
-                        <a href="#">{{ $store->user->name }}</a >
+					<dl class="dl-horizontal" style="margin-bottom:5px">
+                        <label>Owner:</label>
+                        <a href="#">{{ $store->user->getName() }}</a >
                     </dl>
 
-                    <dl class="dl-horizontal">
-                        <label>Email Address:</label>
+                    <dl class="dl-horizontal" style="margin-bottom:5px">
+                        <label>Email:</label>
                         <a href="#">{{ $store->user->email }}</a >
                     </dl>
 
-                    <dl class="dl-horizontal">
-                        <label>Phone Number:</label>
-                        <span>{{ $store->user->contact }}</span>
+                    <dl class="dl-horizontal" style="margin-bottom:5px">
+                        <label>Phone:</label>
+                        <a href="#">{{ $store->user->contact }}</a >
                     </dl>
 
-                    <dl class="dl-horizontal">
-                        <label>Store Area:</label>
-                        <span>{{ $store->area }}</span>
-                    </dl>
-
-                    <dl class="dl-horizontal">
-                        <label>Closest Park:</label>
-                        <span>{{ $store->park }}</span>
-                    </dl>
-
-                    <dl class="dl-horizontal">
-                        <label>Store Address:</label>
-                        <span>{{ $store->address }}</span>
-                    </dl>
-
-                    <dl class="dl-horizontal">
-                        <label>Categories:</label>
-                        @foreach($store->categories as $category)
-                        	<span class="label label-default">{{ $category->name }}</span>
-                        @endforeach
+                    <dl class="dl-horizontal" style="margin-bottom:5px">
+                        <label>Address:</label>
+                        <a href="#">{{ $store->address }}</a >
                     </dl>
                     
 				</div>

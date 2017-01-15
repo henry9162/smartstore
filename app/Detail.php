@@ -26,4 +26,17 @@ class Detail extends Model
         return $this->belongsToMany('SmartStore\Category');
     }
 
+
+    public function products()
+    {
+
+        return $this->hasMany('SmartStore\Product');
+    }
+
+    public function customers()
+    {
+
+        return $this->belongsToMany('SmartStore\Customer');
+    }
+
 }

@@ -20,18 +20,15 @@ Route::get('/', [
 	'as' => 'home'
 ]);
 
-Route::get('/register', [
-	'uses' => 'AuthController@getRegister',
-	'as' => 'auth.register',
-	'middleware' => ['guest']
-]);
-
 Route::post('/register', [
 	'uses' => 'AuthController@Register',
-	'as' => 'auth.postRegister',
-	'middleware' => ['guest'],
+	'as' => 'auth.postRegister'
 ]);
 
+Route::get('/signin', [
+	'uses' => 'AuthController@getSignIn',
+	'as' => 'signIn'
+]);
 
 Route::post('/signIn', [
 	'uses' => 'AuthController@signIn',
@@ -44,16 +41,22 @@ Route::get('/logout', [
 	'as' => 'logout'
 ]);
 
+	
+Route::get('/store', [
+	'uses' => 'StoreController@getcreate',
+	'as' => 'showCreateStore',
+	'middleware' => 'auth'
+]);
+
+Route::post('/store', [
+	'uses' => 'StoreController@create',
+	'as' => 'createStore',
+	'middleware' => 'auth'
+]);
 
 Route::get('/store/{user_id}', [
 	'uses' => 'StoreController@index',
 	'as' => 'store.index'
-]);
-
-
-Route::get('/admin', [
-	'uses' => 'StoreController@admin',
-	'as' => 'store.admin'
 ]);
 
 
@@ -84,4 +87,57 @@ Route::post('/profile/edit', [
 Route::put('/store/update/{userId}', [
 	'uses' => 'ProfileController@updateStore',
 	'as' => 'store.update'
+]);
+
+
+Route::post('/products', [
+	'uses' => 'ProductController@createProduct', 
+	'as' => 'product.store'
+]);
+
+Route::put('/product/{productId}', [
+	'uses' => 'ProductController@updateProduct', 
+	'as' => 'product.update'
+]);
+
+Route::get('/product/{slug}', [
+	'uses' => 'ProductController@getSingle', 
+	'as' => 'product.single'
+])->where('slug', '[\w\d\-\_]+');
+
+Route::get('/add-to-cart/{productId}', [
+	'uses' => 'ProductController@getAddToCart', 
+	'as' => 'product.cart'
+]);
+
+Route::get('/shopping-cart', [
+	'uses' => 'ProductController@getCart', 
+	'as' => 'product.shoppingCart'
+]);
+
+Route::post('/shopping-cart/{productId}', [
+	'uses' => 'ProductController@getUpdateToCart', 
+	'as' => 'product.updateShoppingCart'
+]);
+
+Route::get('/clearedCart/{storeId}', [
+	'uses' => 'ProductController@clearCart', 
+	'as' => 'clearCart'
+]);
+
+Route::get('/checkout', [
+	'uses' => 'ProductController@getCheckout', 
+	'as' => 'checkout'
+]);
+
+Route::post('/checkout', [
+	'uses' => 'ProductController@postCheckout', 
+	'as' => 'postCheckout',
+	'middleware' => 'auth'
+]);
+
+
+Route::get('/orders', [
+	'uses' => 'ProductController@getOrder', 
+	'as' => 'orders'
 ]);

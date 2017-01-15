@@ -8,6 +8,9 @@ use SmartStore\Detail;
 
 use SmartStore\Category;
 
+use SmartStore\State;
+
+
 class HomeController extends Controller
 {
     
@@ -16,7 +19,8 @@ class HomeController extends Controller
     {
 
         $stores = Detail::all();
+        $states = State::all();
 
-        return view('home')->withStores($stores);
+        return view('home')->withStores($stores)->withStates($states);
     }
 }
