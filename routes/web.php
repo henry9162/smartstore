@@ -136,8 +136,54 @@ Route::post('/checkout', [
 	'middleware' => 'auth'
 ]);
 
-
 Route::get('/orders', [
 	'uses' => 'ProductController@getOrder', 
 	'as' => 'orders'
 ]);
+
+Route::post('/product/{slug}', [
+	'uses' => 'ProductController@postReview', 
+	'as' => 'postReview',
+	'middleware' => 'auth'
+]);
+
+Route::get('/store_reviews/{storeId}', [
+	'uses' => 'StoreController@getReview', 
+	'as' => 'store.reviews'
+]);
+
+
+Route::post('/store_reviews/{id}', [
+	'uses' => 'StoreController@postReview', 
+	'as' => 'postStoreReview',
+	'middleware' => 'auth'
+]);
+
+
+/*Interview routes
+*/
+Route::get('/candidates', [
+'uses' => 'CandidateController@getCandidates', 
+'as' => 'candidates',
+	]);
+
+Route::get('/search', [
+'uses' => 'SearchController@getResults', 
+'as' => 'search.results',
+	]);
+
+Route::get('/get_search', [
+'uses' => 'SearchController@getSearch', 
+'as' => 'getSearch',
+	]);
+
+
+Route::post('/get_search', [
+'uses' => 'SearchController@getSearch', 
+'as' => 'getSearch',
+	]);
+
+Route::get('/categories', [
+'uses' => 'SearchController@getCategories', 
+'as' => 'categories',
+	]);

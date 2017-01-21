@@ -23,4 +23,10 @@ class Order extends Model
 
     	return $this->belongsToMany('SmartStore\Product');
     }
+
+    public function detail()
+    {
+
+        return $this->belongsTo('SmartStore\Detail');
+    }
 }

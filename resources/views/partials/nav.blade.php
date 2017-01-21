@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">                 
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>                       
-            <a class="navbar-brand" href="/">SmartStore</a>
+            <a class="navbar-brand" href="{{ route('home') }}">MarketPlace</a>
         </div>
         
         <div  class="collapse navbar-collapse nav-center"  id="bs-example-navbar-collapse-1">
@@ -20,7 +20,9 @@
             </form>
             
             <ul class="nav navbar-nav navbar-right">
-
+                    {{--<li><a href="{{ route('candidates') }}">All Candidates</a></li>
+                    <li><a href="{{ route('getSearch') }}">Sort Candidate</a></li>
+                    <li><a href="{{ route('categories') }}">All Categories</a></li>--}}
                 <li><a href="{{ route('product.shoppingCart') }}"><span class="glyphicon glyphicon-shopping-cart"></span>
                     Shopping Cart <span class="badge">{{ Session::has('cart') ? Session::get('cart')->totalQuantity : '' }}</span></a></li>
 

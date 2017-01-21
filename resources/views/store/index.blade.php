@@ -12,26 +12,34 @@
 					<h4>Welcome to <span style="color:brown"><i>{{ $store->store }}..</i></span></h4>
 
 					<p>{{ $store->description }}</p>
+                    <div class="ratings">                              
+                        @for ($i=1; $i <= 5 ; $i++)
+                            <span style="color:orange;margin-bottom:0px;" class="glyphicon glyphicon-star{{ ($i <= $store->rating_cache) ? '' : '-empty'}}"></span>
+                        @endfor
+                        <span style="font-size:11px;margin-top:0px">{{$store->rating_count}} {{ str_plural('review', $store->rating_count)}}</span>
+                    </div>
+                    <p style="margin-top:5px"><a href="{{ route('store.reviews', $store->id) }}" class="btn btn-xs btn-primary">Review</a></p>
 				</div>
 			</div>
 			<hr>
 
             <div class="row">
                 @foreach($store->products as $product)
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="thumbnail">
                             <img src="{{ asset('images/' . $product->image) }}" alt="{{ $product->title }}">
                             <div class="caption">
                                 <h4 class="text-center" style="color:brown;margin-top:5px;margin-bottom:2px;"><strong>{{ $product->title }}</strong></h4>
                                 <h3 class="text-center" style="color:grey;margin:15px 0px">${{ $product->price }}</h3>
                                 <p class="text-center"><a href="{{ route('product.single', $product->slug) }}" class="btn btn-warning btn-xs"  style="width:80px;">View</a></p>
-                                <p class="text-center"><a href="{{ route('product.cart', $product->id) }}" class="btn btn-warning btn-xs" style="width:80px;margin-bottom:20px">Add to Cart</a></p>
+                                <p class="text-center"><a href="{{ route('product.cart', $product->id) }}" class="btn btn-warning btn-xs" style="width:80px;margin-bottom:10px">Add to Cart</a></p>
                                 <!-- <p class="text-center"><a href="#" data-toggle="modal" data-target="#viewProduct" class="btn btn-primary btn-xs">View</a></p> -->
-                                 <p style="font-size:10px">
-                                    <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span> <span class="glyphicon glyphicon-star-empty"></span>
-                                    3.7
-                                </p>
+                                 <div class="ratings">                              
+                                    @for ($i=1; $i <= 5 ; $i++)
+                                        <span style="color:orange;margin-bottom:0px;" class="glyphicon glyphicon-star{{ ($i <= $product->rating_cache) ? '' : '-empty'}}"></span>
+                                    @endfor
+                                    <p style="margin-top:0px;"><span style="font-size:11px;margin-top:0px">{{$product->rating_count}} {{ str_plural('review', $product->rating_count)}}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>

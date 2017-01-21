@@ -12,6 +12,9 @@ use SmartStore\Detail;
 
 use SmartStore\Order;
 
+
+use SmartStore\Review;
+
 use Image;
 
 use Auth;
@@ -19,6 +22,10 @@ use Auth;
 use Storage;
 
 use Session;
+
+use Input;
+
+use Validator;
 
 class ProductController extends Controller
 {
@@ -112,7 +119,9 @@ class ProductController extends Controller
 
 		$product = Product::where('slug', '=', $slug)->first();
 
-		return view('product.single')->withProduct($product);
+		$reviews = $product->reviews()->with('user')->approved()->notSpam()->orderBy('created_at','desc')->paginate(100);
+
+		return view('product.single')->withProduct($product)->withReviews($reviews);
 	}
 
 
@@ -241,9 +250,12 @@ class ProductController extends Controller
 		    $order->park = $request->park;
 		    $order->user_id = Auth::user()->id;
 
-		    if (Auth::user()->details){
-		    	$order->detail_id = Auth::user()->details->id;
+
+		    foreach($cart->items as $item){
+		    	$value = $item['item'];
 		    }
+
+		    $order->detail_id = $value->detail->id;
 
 		    $order->save();
 
@@ -266,7 +278,61 @@ class ProductController extends Controller
 			return $order;
 		});
 
-		return view('profile.orders')->withOrders($orders);
+		if($orders->count() > 0){
+
+			foreach ($orders as $order) {
+			
+					foreach($order->cart->items as $item){
+
+					$product = $item['item'];
+				}
+			} 
+
+		return view('profile.orders')->withOrders($orders)->withProduct($product);
+
+		} else {
+
+			$store = Auth::user()->details;
+
+			$storeOrders = Order::where('detail_id', '=', $store->id)->get();
+
+			$storeOrders->transform(function($order, $key) {
+				$order->cart = unserialize($order->cart);
+				return $order;
+			});
+
+			$orderss = [];
+			foreach ($storeOrders as $order) {
+				$orderss[] = $order;
+			}
+
+			return view('profile.orders')->withorderss($orderss);
+		}
+
+	}
+
+
+
+	public function postReview(Request $request, $slug)
+	{
+		//dd($slug);
+		$input = array(
+			'comment' => $request->input('comment'),
+			'rating'  => $request->input('rating')
+		);
+		// instantiate Rating model
+		$review = new Review;
+
+		// Validate that the user's input corresponds to the rules specified in the review model
+		$validator = Validator::make( $input, $review->getCreateRules());
+
+		// If input passes validation - store the review in DB, otherwise return to product page with error message 
+		if ($validator->passes()) {
+			$review->storeReviewForProduct($slug, $input['comment'], $input['rating']);
+			return redirect()->back()->with('review_posted',true);
+		}
+		
+		return redirect()->back()->withErrors($validator)->withInput();
 	}
 
 	

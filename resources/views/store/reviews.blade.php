@@ -25,31 +25,21 @@
 			<div class="row">
 				<div class="col-md-6">
 
-					<img class="img-responsive" src="{{ asset('images/' . $product->image) }}" alt="{{ $product->title }}">
+					<img class="img-responsive" src="{{ asset('images/' . $store->image) }}" alt="{{ $store->store }}">
 
 					<div class="ratings">
-	                  	<p class="pull-right">{{$product->rating_count}} {{ str_plural('review', $product->rating_count)}}</p>
+	                  	<p class="pull-right">{{$store->rating_count}} {{ str_plural('review', $store->rating_count)}}</p>
 	                  	<p>
 		                    @for ($i=1; $i <= 5 ; $i++)
-		                      <span style="color:orange" class="glyphicon glyphicon-star{{ ($i <= $product->rating_cache) ? '' : '-empty'}}"></span>
+		                      <span style="color:orange" class="glyphicon glyphicon-star{{ ($i <= $store->rating_cache) ? '' : '-empty'}}"></span>
 		                    @endfor
-		                    {{ number_format($product->rating_cache, 1)}} stars
+		                    {{ number_format($store->rating_cache, 1)}} stars
 	                  	</p>
 	              	</div>
 
 	              <div class="well" id="reviews-anchor">
 			            <div class="row">
 			                <div class="col-md-12">
-			                  @if(Session::get('errors'))
-			                    <div class="alert alert-danger">
-			                      	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			                      	<h5>There were errors while submitting this review:</h5>
-			                       @foreach($errors->all('<li>:message</li>') as $message)
-			                          {{$message}}
-			                       @endforeach
-			                    </div>
-			                  @endif
-
 			                  @if(Session::has('review_posted'))
 			                    <div class="alert alert-success">
 			                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -84,11 +74,9 @@
 					                  </div>
 				                {!! form::close() !!}
 			                </div>
-			              </div>
+			              </div><br>
 
 			              @foreach($reviews as $review)
-			              	<hr>
-
 			                <div class="row">
 			                  <div class="col-md-12">
 			                    @for ($i=1; $i <= 5; $i++)
@@ -107,30 +95,13 @@
 				</div>
 
 				<div class="col-md-6">
-					@if($product->hasLowStock())
-						<span class="btn btn-danger btn-xs">Low Stock</span>
-					@elseif($product->outOfStock())
-						<span class="btn btn-danger btn-xs">Out of Stock</span>
-					@endif
 
-					<h3>{{ $product->title }}</h3>
-					<p>Sold By: <span style="color:brown">{{ $product->detail->store }}</span></p>
+					<h3>{{ $store->store }}</h3>
 					<hr>
 					
 					<p><strong>Description</strong></p>
-					<p>{{ $product->description }}</p>
+					<p>{{ $store->description }}</p>
 					<hr>
-
-					<div class="row">
-						<div class="col-md-8">
-							<h4>$ {{ $product->price }}</h4>
-						</div>
-						<div class="col-md-4">
-							@if($product->inStock())
-								<p><a href="{{ route('product.cart', $product->id) }}" class="btn btn-warning btn-block btn-sm">Add to Cart</a></p>
-							@endif
-						</div>
-					</div>
 				</div>
 			</div>
 
